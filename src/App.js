@@ -325,7 +325,100 @@
 
 //S>----------------------------------------------------------------------------------------<//
 
-import React from 'react';
+// import React from 'react';
+// import logo from './logo.svg';
+// import './App.css';
+
+// import { useLocalStore, useObserver } from 'mobx-react'
+
+// import Main from './compRedux/main'
+// import OpenWeather from './openWeather'
+
+// const StoreContext = React.createContext()
+
+// const StoreProvider = ({children}) => {
+//   const store = useLocalStore(() => ({
+//     bugs: ["Centipede"],
+//     addBug: (bug) => {
+//       store.bugs.push(bug)
+//     },
+//     // get bugsCount(){
+//     //   return store.bugs.length;
+//     // }
+//     bugsCount: () => {
+//       return store.bugs.length;
+//     }
+//   }))
+
+//   return (
+//     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+//   )
+// }
+
+// const BugsHeader = () => {
+//   const store4 = React.useContext(StoreContext)
+//   return useObserver(() => (
+//     <h1>{store4.bugsCount} Bugs! </h1>
+//   ))
+// }
+
+
+// const BugsList = () => {
+//   const store2 = React.useContext(StoreContext)
+
+//   return useObserver(() => (
+//     <ul>
+//       {store2.bugs.map(bug => (
+//         <li key={bug}>{bug}</li> 
+//       ))}
+//     </ul>
+//   ))
+// }
+
+// const BugsForm = () => {
+//   const store3 = React.useContext(StoreContext)
+//   const [ bug, setBug ] = React.useState("")
+
+//   return (
+//     <form
+//       onSubmit={e => {
+//         store3.addBug(bug)
+//         setBug("")
+//         e.preventDefault()
+//       }}
+//     >
+//       <input 
+//         type="text" 
+//         value={bug} 
+//         onChange={e => {setBug(e.target.value)}}
+//       />
+//       <button type="submit">Add</button>
+//     </form>
+//   )
+// }
+
+// function App() {
+//   return (
+//     <StoreProvider>
+//       <center>
+//         <BugsHeader />
+//         <BugsList />
+//         <BugsForm />
+//         <hr />
+//         <Main />
+//         <hr />
+//         <OpenWeather />
+//       </center>
+//     </StoreProvider>
+//   );
+// }
+
+// export default App;
+
+//S>----------------------------------------------------------------------------------------<//
+
+
+import React, { useRef } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -342,12 +435,12 @@ const StoreProvider = ({children}) => {
     addBug: (bug) => {
       store.bugs.push(bug)
     },
-    // get bugsCount(){
-    //   return store.bugs.length;
-    // }
-    bugsCount: () => {
+    get bugsCount(){
       return store.bugs.length;
     }
+    // bugsCount: () => {
+    //   return store.bugs.length;
+    // }
   }))
 
   return (
@@ -377,20 +470,18 @@ const BugsList = () => {
 
 const BugsForm = () => {
   const store3 = React.useContext(StoreContext)
-  const [ bug, setBug ] = React.useState("")
+  const inputRef = useRef()
 
   return (
     <form
       onSubmit={e => {
-        store3.addBug(bug)
-        setBug("")
+        store3.addBug(inputRef.current.value)
         e.preventDefault()
       }}
     >
       <input 
         type="text" 
-        value={bug} 
-        onChange={e => {setBug(e.target.value)}}
+        ref={inputRef}
       />
       <button type="submit">Add</button>
     </form>
@@ -400,15 +491,19 @@ const BugsForm = () => {
 function App() {
   return (
     <StoreProvider>
-      <center>
-        <BugsHeader />
-        <BugsList />
-        <BugsForm />
-        <hr />
-        <Main />
-        <hr />
-        <OpenWeather />
-      </center>
+      <div className="content">
+        <div className="mobx">
+          <BugsHeader />
+          <BugsList />
+          <BugsForm />
+        </div>
+        <div className="reduxHooks">
+          <Main />
+        </div>
+        <div className="openWeather">
+          <OpenWeather />
+        </div>
+      </div>
     </StoreProvider>
   );
 }
